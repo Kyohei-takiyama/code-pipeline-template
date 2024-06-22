@@ -42,5 +42,26 @@ resource "aws_codebuild_project" "this" {
     compute_type    = "BUILD_GENERAL1_SMALL"
     image           = "aws/codebuild/standard:7.0"
     privileged_mode = true
+
+    environment_variable {
+      name  = "AWS_DEFAULT_REGION"
+      value = var.aws_region
+    }
+    environment_variable {
+      name  = "AWS_REGION"
+      value = var.aws_region
+    }
+    environment_variable {
+      name  = "AWS_ACCOUNT_ID"
+      value = data.aws_caller_identity.current.account_id
+    }
+    environment_variable {
+      name  = "IMAGE_REPO_NAME"
+      value = aws_ecr_repository.this.name
+    }
+    environment_variable {
+      name  = "IMAGE_TAG"
+      value = "latest"
+    }
   }
 }
