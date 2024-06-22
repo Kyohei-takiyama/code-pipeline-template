@@ -50,8 +50,8 @@ resource "aws_iam_role_policy_attachment" "ecr_power_user" {
 }
 
 module "codepipeline_role" {
-  source     = "./iam_role"
-  name       = "${var.prefix}-codepipeline-role"
-  policy     = data.aws_iam_policy_document.codepipeline.json
-  identifier = "codepipeline.amazonaws.com"
+  source      = "./iam_role"
+  name        = "${var.prefix}-codepipeline-role"
+  policy      = data.aws_iam_policy_document.codepipeline.json
+  identifiers = ["codepipeline.amazonaws.com", "ecs-tasks.amazonaws.com"]
 }
