@@ -11,7 +11,7 @@ phases:
       - IMAGE=${REPOSITORY_ENDPOINT}/${IMAGE_REPO_NAME}
       - aws --version
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${REPOSITORY_ENDPOINT}
-      - echo "Commit SHA: $CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - echo Commit SHA $CODEBUILD_RESOLVED_SOURCE_VERSION
       - IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
   build:
     commands:
