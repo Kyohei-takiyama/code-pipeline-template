@@ -23,7 +23,12 @@ data "aws_iam_policy_document" "codepipeline" {
       "ecs:DescribeServices",
       "ecs:DescribeTaskDefinition",
       "ecs:RegisterTaskDefinition",
-      "ecs:UpdateService"
+      "ecs:UpdateService",
+      "codestar-connections:UseConnection",
+      "codestar-connections:CreateConnection",
+      "codestar-connections:UpdateConnection",
+      "codestar-connections:GetConnection",
+      "codestar-connections:ListConnections"
     ]
   }
   statement {
