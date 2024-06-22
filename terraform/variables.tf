@@ -94,3 +94,7 @@ variable "github_repo" {
 variable "container_name" {
   default = "nginx"
 }
+
+variable "image_tag" {
+  default = "latest"
+}

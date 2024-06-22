@@ -60,9 +60,9 @@ resource "aws_ecs_service" "this" {
     container_port   = 80
   }
 
-  #   lifecycle {
-  #     ignore_changes = [task_definition]
-  #   }
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {

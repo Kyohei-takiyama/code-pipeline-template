@@ -11,14 +11,18 @@ phases:
       - IMAGE=${REPOSITORY_ENDPOINT}/${IMAGE_REPO_NAME}
       - aws --version
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${REPOSITORY_ENDPOINT}
+      - echo "Commit SHA: $CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t ${IMAGE}:${IMAGE_TAG} .
+      - docker build -t ${IMAGE}:${$IMAGE_TAG} .
   post_build:
     commands:
       - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push ${IMAGE}:${IMAGE_TAG}
       - echo Writing image definitions file...
       - echo $CONTAINER_NAME - $IMAGE
       - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $IMAGE > imageDetail.json
