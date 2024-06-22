@@ -5,21 +5,21 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR... $AWS_DEFAULT_REGION $AWS_ACCOUNT_ID
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - REPO=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - echo Logging in to Amazon ECR... ${AWS_DEFAULT_REGION} ${AWS_ACCOUNT_ID}
+      - aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - REPO=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}
       - IMAGE=$REPO:latest
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $IMAGE .
+      - docker build -t ${IMAGE} .
       - echo Pushing the Docker image...
-      - docker push $IMAGE
+      - docker push ${IMAGE}
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Writing image definitions file...
-      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $IMAGE > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' ${CONTAINER_NAME} ${IMAGE} > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
