@@ -69,3 +69,12 @@ variable "zone_id" {
 variable "image" {
   default = "nginx:latest"
 }
+
+variable "github_token" {
+}
+
+variable "github_owner" {
+}
+
+variable "github_repo" {
+}

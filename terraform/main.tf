@@ -42,7 +42,6 @@ module "codebuild_role" {
   name       = "${var.prefix}-codebuild-role"
   policy     = data.aws_iam_policy_document.codebuild.json
   identifier = "codebuild.amazonaws.com"
-
 }
 
 module "codepipeline_role" {
