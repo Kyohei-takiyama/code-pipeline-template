@@ -1,3 +1,11 @@
+####################################################
+# CodePipeLine - CodeStarConnection
+####################################################
+resource "aws_codestarconnections_connection" "github" {
+  name          = "cicd-github-connection"
+  provider_type = "GitHub"
+}
+
 data "aws_iam_policy_document" "codepipeline" {
   statement {
     effect    = "Allow"
@@ -54,18 +62,16 @@ resource "aws_codepipeline" "this" {
     action {
       name             = "Source"
       category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["Source"]
 
       # Github configuration reference: https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#structure-configuration-examples
       configuration = {
-        Owner                = var.github_owner
-        Repo                 = var.github_repo
-        Branch               = "main"
-        PollForSourceChanges = "false"
-        OAuthToken           = var.github_token
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = "${var.github_owner}/${var.github_repo}"
+        BranchName       = "main"
       }
     }
   }
