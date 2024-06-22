@@ -5,17 +5,17 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Logging in to Amazon ECR...
       - echo $AWS_ACCOUNT_ID - $AWS_REGION - $IMAGE_REPO_NAME - $IMAGE_TAG
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-      - REPO=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME
-      - IMAGE=$REPO:$IMAGE_TAG
+      - REPOSITORY_ENDPOINT=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+      - IMAGE=${REPOSITORY_ENDPOINT}/${IMAGE_REPO_NAME}
+      - aws --version
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${REPOSITORY_ENDPOINT}
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $IMAGE .
-      - echo Pushing the Docker image...
-      - docker push $IMAGE
+      - docker build -t $IMAGE:${IMAGE_TAG} .
   post_build:
     commands:
       - echo Build completed on `date`
