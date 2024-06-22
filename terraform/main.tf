@@ -44,6 +44,11 @@ module "codebuild_role" {
   identifier = "codebuild.amazonaws.com"
 }
 
+resource "aws_iam_role_policy_attachment" "ecr_power_user" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
+  role       = module.codebuild_role.iam_role_id
+}
+
 module "codepipeline_role" {
   source     = "./iam_role"
   name       = "${var.prefix}-codepipeline-role"
