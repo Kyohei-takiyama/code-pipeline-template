@@ -12,14 +12,23 @@ data "aws_iam_policy_document" "codepipeline" {
       "codebuild:BatchGetBuilds",
       "codebuild:StartBuild",
       "codebuild:StopBuild",
-      "ecs:RegisterTaskDefinition",
-      "ecs:DeregisterTaskDefinition",
-      "ecs:UpdateService",
       "ecs:DescribeServices",
-      "ecs:ListTasks",
-      "ecs:DescribeTasks",
-      "iam:PassRole",
+      "ecs:DescribeTaskDefinition",
+      "ecs:RegisterTaskDefinition",
+      "ecs:UpdateService"
     ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringEqualsIfExists"
+      variable = "iam:PassedToService"
+      values   = ["ecs-tasks.amazonaws.com"]
+    }
   }
 }
 
@@ -95,7 +104,7 @@ resource "aws_codepipeline" "this" {
       configuration = {
         ClusterName = aws_ecs_cluster.this.name
         ServiceName = aws_ecs_service.this.name
-        FileName    = "imagedefinitions.json"
+        FileName    = "imageDetail.json"
       }
     }
   }

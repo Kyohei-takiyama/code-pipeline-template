@@ -30,7 +30,8 @@ resource "aws_codebuild_project" "this" {
   service_role = module.codebuild_role.iam_role_arn
 
   source {
-    type = "CODEPIPELINE"
+    type      = "CODEPIPELINE"
+    buildspec = "buildspec.yml"
   }
 
   artifacts {
@@ -66,6 +67,18 @@ resource "aws_codebuild_project" "this" {
     environment_variable {
       name  = "CONTAINER_NAME"
       value = var.container_name
+    }
+    environment_variable {
+      name  = "TASK_FAMILY"
+      value = aws_ecs_task_definition.this.family
+    }
+    environment_variable {
+      name  = "EXECUTION_ROLE_ARN"
+      value = module.ecs_task_execution_role.iam_role_arn
+    }
+    environment_variable {
+      name  = "TASK_ROLE_ARN"
+      value = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
     }
   }
 }
