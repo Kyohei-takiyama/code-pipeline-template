@@ -63,5 +63,9 @@ resource "aws_codebuild_project" "this" {
       name  = "IMAGE_TAG"
       value = "latest"
     }
+    environment_variable {
+      name  = "CONTAINER_NAME"
+      value = var.container_name
+    }
   }
 }

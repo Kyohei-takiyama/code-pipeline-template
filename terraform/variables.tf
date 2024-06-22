@@ -90,3 +90,7 @@ variable "github_owner" {
 
 variable "github_repo" {
 }
+
+variable "container_name" {
+  default = "nginx"
+}

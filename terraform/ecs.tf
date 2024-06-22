@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode(
     [
       {
-        name      = "${var.prefix}-ecs-container"
+        name      = var.container_name
         image     = var.image
         essential = true
         cpu       = 256
@@ -26,16 +26,6 @@ resource "aws_ecs_task_definition" "this" {
             "awslogs-region"        = var.aws_region
           }
         }
-        # secrets = [
-        #   {
-        #     name      = "DB_PASSWORD"
-        #     valueFrom = "/db/password"
-        #   },
-        #   {
-        #     name      = "DB_USERNAME"
-        #     valueFrom = "/db/username"
-        #   }
-        # ]
         portMappings = [
           {
             protocol      = "tcp"
@@ -66,7 +56,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.http.arn
-    container_name   = "${var.prefix}-ecs-container"
+    container_name   = var.container_name
     container_port   = 80
   }
 
